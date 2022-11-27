@@ -3,8 +3,8 @@ package com.gluecode.fpvdrone.network.packet;
 import com.gluecode.fpvdrone.Main;
 import com.gluecode.fpvdrone.race.SerialRaceGate;
 import com.gluecode.fpvdrone.race.SerialRaceTrack;
-//import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -111,13 +111,13 @@ public class PacketHandler {
    * Send a packet to a specific player.<br>
    * Must be called Server side.
    */
-//  public static void sendTo(Object msg, ServerPlayerEntity player) {
-//    if (!(player instanceof FakePlayer)) {
-//      HANDLER.sendTo(
-//        msg,
-//        player.connection.connection,
-//        NetworkDirection.PLAY_TO_CLIENT
-//      );
-//    }
-//  }
+  public static void sendTo(Object msg, ServerPlayer player) {
+    if (!(player instanceof FakePlayer)) {
+      HANDLER.sendTo(
+        msg,
+        player.connection.connection,
+        NetworkDirection.PLAY_TO_CLIENT
+      );
+    }
+  }
 }

@@ -52,7 +52,7 @@ public class ControllerConfig {
         floatArray[i] = el;
       } else if (jsonArray.get(i) instanceof Double) {
         Double el = (Double) jsonArray.get(i);
-        floatArray[i] = new Float(el);
+        floatArray[i] = (float) el.doubleValue();
       } else if (jsonArray.get(i) instanceof Integer) {
         Integer el = (Integer) jsonArray.get(i);
         floatArray[i] = el;

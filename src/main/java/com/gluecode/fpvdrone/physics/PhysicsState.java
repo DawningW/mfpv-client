@@ -5,6 +5,7 @@ import com.gluecode.fpvdrone.entity.DroneBuild;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.jme3.math.Vector3f;
+import com.mojang.math.Vector3d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -45,9 +46,7 @@ public class PhysicsState {
     if (entity == null) {
       return nextVelocity;
     }
-  
-    Main.LOGGER.info("collide 4");
-    
+
     float limit = 500; // m/s
     float elastic = 0.2f;
     //    float limit = 500.408f;
@@ -85,21 +84,26 @@ public class PhysicsState {
           clipped,
           nextVelocity
         );
-
-        entity.setPos(entity.getX() + collisionResults.displacement.x, entity.getY() + collisionResults.displacement.y, collisionResults.displacement.z);
-
+        entity.setBoundingBox(entity.getBoundingBox()
+          .move(new Vec3(
+            collisionResults.displacement.x,
+            collisionResults.displacement.y,
+            collisionResults.displacement.z
+          )));
+        AABB axisalignedbb = entity.getBoundingBox();
+        entity.setPosRaw((axisalignedbb.minX + axisalignedbb.maxX) / 2.0D, axisalignedbb.minY, (axisalignedbb.minZ + axisalignedbb.maxZ) / 2.0D);
         return collisionResults.velocity;
       }
-    
+
       entity.setBoundingBox(entity.getBoundingBox().move(clipped));
       if (SettingsLoader.currentUseRealtimePhysics) {
-        entity.setPos(entity.getX(), entity.getY(), entity.getZ());
+        entity.setPosRaw(entity.getX(), entity.getY(), entity.getZ());
         entity.setOldPosAndRot();
       }
       //entity.setLocationFromBoundingbox();
       AABB axisalignedbb = entity.getBoundingBox();
       entity.setPosRaw((axisalignedbb.minX + axisalignedbb.maxX) / 2.0D, axisalignedbb.minY, (axisalignedbb.minZ + axisalignedbb.maxZ) / 2.0D);
-    
+
       Vec3 clippedVelocity = clipped.scale(1f / elapsed);
       return new Vector3f(
         (float) clippedVelocity.x,

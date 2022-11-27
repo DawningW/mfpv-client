@@ -1,19 +1,12 @@
 package com.gluecode.fpvdrone.gui.screen;
 
-import com.gluecode.fpvdrone.Main;
-import com.gluecode.fpvdrone.gui.list.ControllerChoicesList;
+import com.gluecode.fpvdrone.gui.widget.list.ControllerChoicesList;
 import com.gluecode.fpvdrone.gui.screen.addon.DoneFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.ServerTitleWikiHeader;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.SettingsScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
-
-import javax.annotation.Nullable;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 
 public class ControllerChoicesScreen extends FpvScreen {
   private ControllerChoicesList keyBindingList;
@@ -43,7 +36,7 @@ public class ControllerChoicesScreen extends FpvScreen {
       this,
       this::handleIdSet
     );
-    this.children.add(this.keyBindingList);
+    this.addWidget(this.keyBindingList);
   }
   
   @Override

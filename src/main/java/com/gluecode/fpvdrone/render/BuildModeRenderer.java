@@ -5,20 +5,16 @@ import com.gluecode.fpvdrone.race.RaceClient;
 import com.gluecode.fpvdrone.race.SerialRaceGate;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
@@ -32,7 +28,7 @@ public class BuildModeRenderer {
   private static final int GL_LINES = 1;
 
   @SubscribeEvent
-  public static void handleGateRendering(RenderWorldLastEvent event) {
+  public static void handleGateRendering(RenderLevelLastEvent event) {
     if (!RaceClient.isBuildMode) return;
 
     LapRender.loadCustomShader();
@@ -41,11 +37,11 @@ public class BuildModeRenderer {
 
     PoseStack stack = event.getPoseStack();
 
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
     applyLineMode();
 
-    Vec3 eyePosMC = player.getEyePosition(event.getPartialTicks());
+    Vec3 eyePosMC = player.getEyePosition(event.getPartialTick());
     com.jme3.math.Vector3f eyePos = new com.jme3.math.Vector3f(
       (float) eyePosMC.x,
       (float) eyePosMC.y,
@@ -57,7 +53,7 @@ public class BuildModeRenderer {
     for (SerialRaceGate gate : RaceClient.builtGates) {
       stack.pushPose();
 
-      buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+      buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
       stack.translate(
         gate.origin.getX(),
         gate.origin.getY(),
@@ -68,11 +64,11 @@ public class BuildModeRenderer {
         matrix,
         buffer,
         player,
-        event.getPartialTicks(),
+        event.getPartialTick(),
         gate.origin,
         gate.farthest.subtract(gate.origin)
       );
-      tessellator.end();
+      tesselator.end();
 
       stack.popPose();
     }

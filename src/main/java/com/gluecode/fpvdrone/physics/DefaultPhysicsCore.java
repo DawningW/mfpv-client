@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 
 public class DefaultPhysicsCore implements IPhysicsCore {
   private static final float rads = (float) (Math.PI / 180);
@@ -195,7 +196,7 @@ public class DefaultPhysicsCore implements IPhysicsCore {
       velocity = PhysicsState.collideAndMove(nextVelocity, timeStep);
       
       if (System.currentTimeMillis() - tic > maxAllowedMillis) {
-        Main.LOGGER.info("Physics simulation running behind!");
+        Main.LOGGER.warn("Physics simulation running behind!");
         break;
       }
       

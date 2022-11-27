@@ -4,25 +4,25 @@ import com.gluecode.fpvdrone.gui.screen.EmptyListScreen;
 import com.gluecode.fpvdrone.gui.screen.addon.BackHelpFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.WizardHeader;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.ConfirmOpenLinkScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 
 public class HelpQAScreen extends EmptyListScreen {
-  private LinkedHashMap<String, ITextComponent> qa;
+  private LinkedHashMap<String, Component> qa;
   
   public HelpQAScreen(
     Screen previousScreen,
-    LinkedHashMap<String, ITextComponent> qa
+    LinkedHashMap<String, Component> qa
   ) {
     super(previousScreen, null, new BackHelpFooter());
     this.qa = qa;
@@ -50,8 +50,8 @@ public class HelpQAScreen extends EmptyListScreen {
     for (int i = 0; i < questions.length; i++) {
       int y = 3 * lineHeight * i;
       String q = questions[i];
-      ITextComponent a = this.qa.get(q);
-      StringTextComponent answer = new StringTextComponent("A: ");
+      Component a = this.qa.get(q);
+      TextComponent answer = new TextComponent("A: ");
       answer.append(a);
       
       minecraft.font.draw(
@@ -84,8 +84,8 @@ public class HelpQAScreen extends EmptyListScreen {
     for (int i = 0; i < questions.length; i++) {
       int y = 3 * lineHeight * i;
       String q = questions[i];
-      ITextComponent a = this.qa.get(q);
-      StringTextComponent answer = new StringTextComponent("A: ");
+      Component a = this.qa.get(q);
+      TextComponent answer = new TextComponent("A: ");
       answer.append(a);
       
       int answerY = WizardConfig.headerHeight +
@@ -129,7 +129,7 @@ public class HelpQAScreen extends EmptyListScreen {
   }
   
   public void handleLinkClick(String url) {
-    this.getMinecraft().setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+    this.getMinecraft().setScreen(new ConfirmLinkScreen((p_244739_1_) -> {
       if (p_244739_1_) {
         Util.getPlatform().openUri(
           url);

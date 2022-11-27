@@ -99,8 +99,7 @@ public class SettingsLoader {
   
   public static void load() {
     Minecraft minecraft = Minecraft.getInstance();
-    if (minecraft == null) return;
-    
+
     String gameDir = minecraft.gameDirectory.getAbsolutePath();
     
     Main.LOGGER.debug(gameDir);

@@ -6,19 +6,18 @@ import com.gluecode.fpvdrone.race.*;
 import com.gluecode.fpvdrone.render.shader.ShaderObject;
 import com.gluecode.fpvdrone.render.shader.ShaderProgram;
 import com.jme3.math.FastMath;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.MainWindow;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.util.math.vector.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -249,7 +248,7 @@ public class LapRender {
   
   @SubscribeEvent
   public static void handleGateRendering(RenderGameOverlayEvent.Pre event) {
-    PlayerEntity self = Minecraft.getInstance().player;
+    Player self = Minecraft.getInstance().player;
     if (self == null) return;
     UUID selfUserId = self.getUUID();
     UUID currentTrackId = RaceClient.currentTrackId.get(selfUserId);
@@ -266,7 +265,7 @@ public class LapRender {
     Entity player = Minecraft.getInstance().getCameraEntity();
     if (player == null) return;
     
-    MainWindow mainWindow = Minecraft.getInstance().getWindow();
+    Window mainWindow = Minecraft.getInstance().getWindow();
     int scaledWidth = mainWindow.getGuiScaledWidth();
     int scaledHeight = mainWindow.getGuiScaledHeight();
     
@@ -278,18 +277,18 @@ public class LapRender {
       (float) eyePosMC.z
     );
     
-    PoseStack stack = event.getPoseStack();
+    PoseStack stack = event.getMatrixStack();
     
     
     stack.pushPose();
     
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
-    applyQuadMode();
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
+//    applyQuadMode();
     
     
     stack.pushPose();
-    buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR); // GL11.GL_QUAD_STRIP
     
     com.jme3.math.Vector3f center = gate.getCenter();
     //    com.jme3.math.Vector3f posf = new com.jme3.math.Vector3f(center.getX(), center.getY(), center.getZ());
@@ -439,11 +438,11 @@ public class LapRender {
     ////        buffer.vertex(x2, y2, z2).color(red, green, blue, opacity).endVertex();
     //    });
     
-    tessellator.end();
+    tesselator.end();
     
     stack.popPose();
     
-    cleanQuadMode();
+//    cleanQuadMode();
     
     stack.popPose();
   }
@@ -735,11 +734,11 @@ public class LapRender {
   //    public abstract void clean();
   //  }
   
-  public static void applyQuadMode() {
-    RenderSystem.shadeModel(GL11.GL_SMOOTH);
-  }
-  
-  public static void cleanQuadMode() {
-    RenderSystem.shadeModel(GL11.GL_FLAT);
-  }
+//  public static void applyQuadMode() {
+//    GL11.glShadeModel(GL11.GL_SMOOTH);
+//  }
+//
+//  public static void cleanQuadMode() {
+//    GL11.glShadeModel(GL11.GL_FLAT);
+//  }
 }

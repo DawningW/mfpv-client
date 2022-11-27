@@ -4,9 +4,9 @@ import com.gluecode.fpvdrone.Main;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class BackFooter extends ScreenAddon {
   public void handleDone(FpvScreen screen) {
@@ -15,12 +15,12 @@ public class BackFooter extends ScreenAddon {
   
   @Override
   public void init(FpvScreen screen) {
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       WizardConfig.left,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.back")),
+      new TextComponent(I18n.get("gui.back")),
       (Button button) -> this.handleDone(screen)
     ));
   }

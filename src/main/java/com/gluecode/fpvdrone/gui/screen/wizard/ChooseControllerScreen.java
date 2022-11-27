@@ -1,20 +1,19 @@
 package com.gluecode.fpvdrone.gui.screen.wizard;
 
 import com.gluecode.fpvdrone.gui.GuiEvents;
-import com.gluecode.fpvdrone.gui.list.ControllerChoicesList;
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.ControllerChoicesList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.addon.BackFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.WizardHeader;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
 
 public class ChooseControllerScreen extends FpvScreen {
   private FPVList list;
@@ -28,17 +27,16 @@ public class ChooseControllerScreen extends FpvScreen {
     
     WizardHeader header = (WizardHeader) this.header;
     if (header != null) {
-      header.addHelpQA(I18n.get("fpvdrone.wizard.chooseController.q1"), new StringTextComponent(I18n.get("fpvdrone.wizard.chooseController.a1")));
-      
-      StringTextComponent a2 = new StringTextComponent(I18n.get("fpvdrone.wizard.chooseController.a2") + " ");
-      StringTextComponent a2url = new StringTextComponent(
-        "How?");
+      header.addHelpQA(I18n.get("fpvdrone.wizard.chooseController.q1"), new TextComponent(I18n.get("fpvdrone.wizard.chooseController.a1")));
+
+      TextComponent a2 = new TextComponent(I18n.get("fpvdrone.wizard.chooseController.a2") + " ");
+      TextComponent a2url = new TextComponent("How?");
       Style style = a2url.getStyle()
         .withClickEvent(new ClickEvent(
           ClickEvent.Action.OPEN_URL,
           "https://minecraftfpv.com/wiki/controllerVerify"
         ))
-        .withColor(Color.fromLegacyFormat(TextFormatting.BLUE))
+        .withColor(ChatFormatting.BLUE)
         .setUnderlined(true);
       a2url.setStyle(style);
       a2.append(a2url);
@@ -58,7 +56,7 @@ public class ChooseControllerScreen extends FpvScreen {
       this,
       this::handleIdSet
     );
-    this.children.add(this.list);
+    this.addWidget(this.list);
   }
   
   @Override

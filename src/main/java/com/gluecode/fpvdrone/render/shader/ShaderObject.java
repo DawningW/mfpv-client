@@ -3,9 +3,9 @@ package com.gluecode.fpvdrone.render.shader;
 import com.gluecode.fpvdrone.Main;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL20;
 
@@ -39,11 +39,11 @@ public class ShaderObject {
       Main.MOD_ID,
       filename
     );
-    IResourceManager resourceManager = Minecraft.getInstance()
+    ResourceManager resourceManager = Minecraft.getInstance()
       .getResourceManager();
     String contents = null;
     try {
-      IResource resource = resourceManager.getResource(resourceLocation);
+      Resource resource = resourceManager.getResource(resourceLocation);
       contents = IOUtils.toString(
         resource.getInputStream(),
         StandardCharsets.UTF_8

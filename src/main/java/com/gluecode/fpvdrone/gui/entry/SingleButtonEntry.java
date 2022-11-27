@@ -1,15 +1,16 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -32,8 +33,8 @@ public class SingleButtonEntry extends FPVEntry {
       0,
       80,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.settings.choose")),
-      (@Nullable Button button) -> {
+      new TextComponent(I18n.get("fpvdrone.settings.choose")),
+      (Button button) -> {
         onSelect.run();
       }
     );
@@ -47,7 +48,7 @@ public class SingleButtonEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -76,7 +77,12 @@ public class SingleButtonEntry extends FPVEntry {
   }
   
   @Override
-  public List<? extends IGuiEventListener> children() {
+  public @NotNull List<? extends GuiEventListener> children() {
     return ImmutableList.of(this.selectButton);
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

@@ -9,19 +9,15 @@ import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.render.StickOverlayRenderer;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.jme3.math.FastMath;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
 import org.json.simple.JSONArray;
-import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 
@@ -92,7 +88,7 @@ public class CalibrateControllerStickScreen extends EmptyListScreen {
       }
       
       Minecraft minecraft = Minecraft.getInstance();
-      minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+      minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
       
       SettingsLoader.save();
       this.onProceed();
@@ -109,7 +105,7 @@ public class CalibrateControllerStickScreen extends EmptyListScreen {
       SettingsLoader.save();
   
       Minecraft minecraft = Minecraft.getInstance();
-      minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+      minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
       
       this.onProceed();
     });
@@ -303,11 +299,11 @@ public class CalibrateControllerStickScreen extends EmptyListScreen {
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 40 + WizardConfig.doubleButtonSpacing + 8,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.wizard.calibrateControllerStick.retry")),
+      new TextComponent(I18n.get("fpvdrone.wizard.calibrateControllerStick.retry")),
       this::handleRetry
     );
   
-    this.addButton(this.retryButton);
+    this.addRenderableWidget(this.retryButton);
   }
   
   @Override
@@ -353,10 +349,10 @@ public class CalibrateControllerStickScreen extends EmptyListScreen {
       this.renderRangeLabels(stack, -21f);
       this.renderRangeLabels(stack, 21f);
     }
-    
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
-    buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
+    buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
     
     stack.pushPose();
     stack.translate(-21f, 0, 0);
@@ -382,7 +378,7 @@ public class CalibrateControllerStickScreen extends EmptyListScreen {
     stack.popPose();
   
     StickOverlayRenderer.applyLineMode();
-    tessellator.end();
+    tesselator.end();
     StickOverlayRenderer.cleanLineMode();
   }
   

@@ -1,10 +1,10 @@
-package com.gluecode.fpvdrone.gui.list;
+package com.gluecode.fpvdrone.gui.widget.list;
 
 import com.gluecode.fpvdrone.gui.entry.CategoryEntry;
 import com.gluecode.fpvdrone.gui.entry.DoubleButtonEntry;
 import com.gluecode.fpvdrone.gui.screen.ModelChoicesScreen;
 import com.gluecode.fpvdrone.util.SettingsLoader;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 import java.util.*;
 
@@ -54,11 +54,9 @@ public class ModelChoiceList extends FPVList {
       () -> SettingsLoader.currentModel.equals(SettingsLoader.defaultWhoop)
     ));
 
-    List keys = new ArrayList(SettingsLoader.models.keySet());
+    List<String> keys = new ArrayList<String>(SettingsLoader.models.keySet());
     Collections.sort(keys);
-    for (Object key : keys) {
-      String presetName = (String) key;
-
+    for (String presetName : keys) {
       if (presetName.equals(SettingsLoader.defaultModelName)) continue;
       if (presetName.equals(SettingsLoader.defaultWhoop)) continue;
 

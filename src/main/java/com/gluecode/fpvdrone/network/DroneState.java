@@ -10,7 +10,7 @@ import com.jme3.math.Vector3f;
 //import net.minecraft.util.math.vector.Vector3f;
 import com.jme3.math.Quaternion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -97,7 +97,7 @@ public class DroneState {
       return last;
     }
   
-    PlayerEntity self = Minecraft.getInstance().player;
+    Player self = Minecraft.getInstance().player;
     if (self != null && self.getUUID().equals(uuid)) {
       // self is always up-to-date, so no interpolation is needed.
       return last;
@@ -225,7 +225,7 @@ public class DroneState {
   public static float[] getMotorPos(UUID uuid, float elapsed) {
     float[] motorPos;
     
-    PlayerEntity self = Minecraft.getInstance().player;
+    Player self = Minecraft.getInstance().player;
     if (self != null && self.getUUID().equals(uuid)) {
       // self is always up-to-date, so no interpolation is needed.
       motorPos = PhysicsState.getCore().getMotorPos();

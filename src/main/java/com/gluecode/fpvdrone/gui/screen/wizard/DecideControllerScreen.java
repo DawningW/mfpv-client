@@ -5,10 +5,10 @@ import com.gluecode.fpvdrone.gui.screen.EmptyListScreen;
 import com.gluecode.fpvdrone.gui.screen.addon.WizardHeader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class DecideControllerScreen extends EmptyListScreen {
   
@@ -22,21 +22,21 @@ public class DecideControllerScreen extends EmptyListScreen {
   protected void init() {
     super.init();
   
-    this.addButton(new Button(
+    this.addRenderableWidget(new Button(
       this.width / 2 - WizardConfig.wideButtonWidth / 2,
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.yes")),
+      new TextComponent(I18n.get("gui.yes")),
       this::handleYes
     ));
   
-    this.addButton(new Button(
+    this.addRenderableWidget(new Button(
       this.width / 2 - WizardConfig.wideButtonWidth / 2,
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 20 + WizardConfig.doubleButtonSpacing,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.no")),
+      new TextComponent(I18n.get("gui.no")),
       this::handleNo
     ));
   }

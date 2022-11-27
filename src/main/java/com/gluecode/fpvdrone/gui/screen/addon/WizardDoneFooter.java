@@ -4,9 +4,9 @@ import com.gluecode.fpvdrone.gui.GuiEvents;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class WizardDoneFooter extends ScreenAddon {
   private Runnable onDone;
@@ -20,9 +20,7 @@ public class WizardDoneFooter extends ScreenAddon {
       this.onDone.run();
       return;
     }
-    if (screen.getMinecraft() != null) {
-      screen.getMinecraft().setScreen(screen.previousScreen);
-    }
+    screen.getMinecraft().setScreen(screen.previousScreen);
   }
   
   public void handleOpenWizard(FpvScreen screen) {
@@ -31,21 +29,21 @@ public class WizardDoneFooter extends ScreenAddon {
   
   @Override
   public void init(FpvScreen screen) {
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       WizardConfig.left,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth * 2,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.wizard")),
+      new TextComponent(I18n.get("fpvdrone.wizard")),
       (Button button) -> this.handleOpenWizard(screen)
     ));
     
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       screen.width - WizardConfig.wideButtonWidth - WizardConfig.right,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.done")),
+      new TextComponent(I18n.get("gui.done")),
       (Button button) -> this.handleDone(screen)
     ));
   }

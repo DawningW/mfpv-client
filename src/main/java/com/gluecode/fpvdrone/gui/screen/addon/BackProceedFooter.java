@@ -3,9 +3,9 @@ package com.gluecode.fpvdrone.gui.screen.addon;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.function.Supplier;
 
@@ -40,12 +40,12 @@ public class BackProceedFooter extends ScreenAddon {
   
   @Override
   public void init(FpvScreen screen) {
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       WizardConfig.left,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.back")),
+      new TextComponent(I18n.get("gui.back")),
       (Button button) -> this.handleBack(screen)
     ));
   
@@ -54,12 +54,12 @@ public class BackProceedFooter extends ScreenAddon {
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.proceed")),
+      new TextComponent(I18n.get("gui.proceed")),
       (Button button) -> {
         this.onProceed.run();
       }
     );
-    screen.addButton(this.proceedButton);
+    screen.addRenderableWidget(this.proceedButton);
   }
   
   @Override
@@ -72,7 +72,7 @@ public class BackProceedFooter extends ScreenAddon {
       } else {
         this.proceedButton.visible = true;
         if (this.proceedLabel != null) {
-          this.proceedButton.setMessage(new StringTextComponent(this.proceedLabel.get()));
+          this.proceedButton.setMessage(new TextComponent(this.proceedLabel.get()));
         }
       }
     }

@@ -1,17 +1,19 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,7 +55,7 @@ public class ChannelEntry extends FPVEntry {
       0,
       50,
       20,
-      new StringTextComponent(name),
+      new TextComponent(name),
       this::handleChangePress
     );
     this.invertButton = new Button(
@@ -61,7 +63,7 @@ public class ChannelEntry extends FPVEntry {
       0,
       50,
       20,
-      new StringTextComponent(I18n.get(
+      new TextComponent(I18n.get(
         "fpvdrone.channel.notinverted")),
       this::handleInvertPress
     );
@@ -70,7 +72,7 @@ public class ChannelEntry extends FPVEntry {
       0,
       50,
       20,
-      new StringTextComponent(I18n.get("controls.reset")),
+      new TextComponent(I18n.get("controls.reset")),
       this::handleResetPress
     );
     this.editMode = false;
@@ -103,7 +105,7 @@ public class ChannelEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -140,21 +142,21 @@ public class ChannelEntry extends FPVEntry {
     
     if (this.getInverted.getAsBoolean()) {
       // func_238482_a_ = setMessage
-      this.invertButton.setMessage(new StringTextComponent(I18n.get(
+      this.invertButton.setMessage(new TextComponent(I18n.get(
         "fpvdrone.channel.inverted")));
     } else {
-      this.invertButton.setMessage(new StringTextComponent(I18n.get(
+      this.invertButton.setMessage(new TextComponent(I18n.get(
         "fpvdrone.channel.notinverted")));
     }
     
     if (this.editMode) {
-      this.changeButton.setMessage(new StringTextComponent("> CH " +
+      this.changeButton.setMessage(new TextComponent("> CH " +
                                                            editValue +
                                                            "_ <"));
     } else {
       int channel = this.getChannel.getAsInt();
       String channelName = "CH " + (channel + 1);
-      this.changeButton.setMessage(new StringTextComponent(channelName));
+      this.changeButton.setMessage(new TextComponent(channelName));
     }
     
     this.changeButton.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -163,7 +165,7 @@ public class ChannelEntry extends FPVEntry {
   }
   
   @Override
-  public List<? extends IGuiEventListener> children() {
+  public @NotNull List<? extends GuiEventListener> children() {
     return ImmutableList.of(
       this.changeButton,
       this.invertButton,
@@ -202,5 +204,10 @@ public class ChannelEntry extends FPVEntry {
     this.editMode = false;
     this.setDefaultValue.run();
     SettingsLoader.save();
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

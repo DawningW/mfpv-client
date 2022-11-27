@@ -4,13 +4,13 @@ import com.gluecode.fpvdrone.gui.screen.EmptyListScreen;
 import com.gluecode.fpvdrone.gui.screen.addon.BackFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.WizardHeader;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ConfirmOpenLinkScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class HelpScreen extends EmptyListScreen {
   
@@ -21,7 +21,7 @@ public class HelpScreen extends EmptyListScreen {
   }
   
   public void handleDiscord(Screen screen) {
-    screen.getMinecraft().setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+    screen.getMinecraft().setScreen(new ConfirmLinkScreen((p_244739_1_) -> {
       if (p_244739_1_) {
         Util.getPlatform().openUri(
           "https://discord.gg/WJfhXuz");
@@ -31,7 +31,7 @@ public class HelpScreen extends EmptyListScreen {
   }
   
   public void handleWiki(Screen screen) {
-    screen.getMinecraft().setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+    screen.getMinecraft().setScreen(new ConfirmLinkScreen((p_244739_1_) -> {
       if (p_244739_1_) {
         Util.getPlatform().openUri(
           "https://minecraftfpv.com/wiki");
@@ -44,21 +44,21 @@ public class HelpScreen extends EmptyListScreen {
   protected void init() {
     super.init();
   
-    this.addButton(new Button(
+    this.addRenderableWidget(new Button(
       this.width / 2 - WizardConfig.shortButtonWidth / 2,
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing,
       WizardConfig.shortButtonWidth,
       20,
-      new StringTextComponent("Discord"),
+      new TextComponent("Discord"),
       (button) -> this.handleDiscord(this)
     ));
   
-    this.addButton(new Button(
+    this.addRenderableWidget(new Button(
       this.width / 2 - WizardConfig.shortButtonWidth / 2,
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 20 + WizardConfig.doubleButtonSpacing,
       WizardConfig.shortButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.settings.wiki")),
+      new TextComponent(I18n.get("fpvdrone.settings.wiki")),
       (button) -> this.handleWiki(this)
     ));
   }

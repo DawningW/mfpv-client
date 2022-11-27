@@ -1,46 +1,40 @@
 package com.gluecode.fpvdrone.entity;
 
-import com.gluecode.fpvdrone.Main;
 import com.jme3.math.FastMath;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.client.model.geom.ModelPart;
 import org.lwjgl.opengl.GL11;
 
-public class PropModelRenderer extends ModelRenderer {
+import java.util.List;
+import java.util.Map;
+
+public class PropModelPart extends ModelPart {
   public int motorNumber;
   public DroneBuild build;
   public float alpha = 1; // Must be set by DroneModel.render
   
-  public PropModelRenderer(
-    Model model,
+  public PropModelPart(
+    List<ModelPart.Cube> cubes,
+    Map<String, ModelPart> children,
     DroneBuild build,
     int motorNumber
   ) {
-    super(model);
-    this.motorNumber = motorNumber;
+    super(cubes, children);
     this.build = build;
-    //        this.motorWidth = motorWidth;
+    this.motorNumber = motorNumber;
+//    this.motorWidth = motorWidth;
   }
   
   @Override
   public void compile(
-    PoseStack.Entry matrixEntryIn,
+    PoseStack.Pose matrixEntryIn,
     VertexConsumer bufferIn,
     int packedLightIn,
     int packedOverlayIn,
@@ -49,7 +43,7 @@ public class PropModelRenderer extends ModelRenderer {
     float blue,
     float ignoredAlpha
   ) {
-      //            super.doRender(matrixEntryIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+//      super.doRender(matrixEntryIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
       Matrix4f matrix4f = matrixEntryIn.pose();
       Matrix3f matrix3f = matrixEntryIn.normal();
       buildBlade(
@@ -97,10 +91,10 @@ public class PropModelRenderer extends ModelRenderer {
     // Starts at Z = 0;
     // The blade is built as a triangle strip with vertices on each side interleaved.
     
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
     
-    buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.NEW_ENTITY);
+    buffer.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.NEW_ENTITY);
     
     float scale = 32f;
     
@@ -224,12 +218,11 @@ public class PropModelRenderer extends ModelRenderer {
       GlStateManager.SourceFactor.ONE,
       GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
     );
-    RenderHelper.turnBackOn();
+//    RenderHelper.turnBackOn();
     Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
     Minecraft.getInstance().gameRenderer.overlayTexture().setupOverlayColor();
     
-    tessellator.end();
-    
+    tesselator.end();
     if (!originalDepthTest) {
       RenderSystem.disableDepthTest();
     }
@@ -238,7 +231,7 @@ public class PropModelRenderer extends ModelRenderer {
     }
     RenderSystem.disableBlend();
     RenderSystem.defaultBlendFunc();
-    RenderHelper.turnOff();
+//    RenderHelper.turnOff();
     Minecraft.getInstance().gameRenderer.lightTexture()
       .turnOffLightLayer();
     Minecraft.getInstance().gameRenderer.overlayTexture().teardownOverlayColor();

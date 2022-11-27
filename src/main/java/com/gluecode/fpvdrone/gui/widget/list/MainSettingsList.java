@@ -1,4 +1,4 @@
-package com.gluecode.fpvdrone.gui.list;
+package com.gluecode.fpvdrone.gui.widget.list;
 
 import com.gluecode.fpvdrone.gui.entry.CategoryEntry;
 import com.gluecode.fpvdrone.gui.entry.DoubleButtonEntry;
@@ -7,7 +7,7 @@ import com.gluecode.fpvdrone.gui.screen.MainSettingsScreen;
 import com.gluecode.fpvdrone.gui.GuiEvents;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.util.SettingsLoader;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public class MainSettingsList extends FPVList {
   private int maxListLabelWidth;

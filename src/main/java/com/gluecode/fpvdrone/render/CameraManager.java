@@ -11,18 +11,19 @@ import com.gluecode.fpvdrone.util.Transforms;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import net.minecraft.client.Camera;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
@@ -103,14 +104,14 @@ public class CameraManager {
   public static void setSpectateCamera(EntityViewRenderEvent.CameraSetup event) {
     Minecraft minecraft = Minecraft.getInstance();
     Entity cameraEntity = minecraft.getCameraEntity();
-    PlayerEntity self = minecraft.player;
-    if (cameraEntity instanceof PlayerEntity && !self.equals(cameraEntity)) {
+    Player self = minecraft.player;
+    if (cameraEntity instanceof Player && !Objects.equals(self, cameraEntity)) {
       UUID uuid = cameraEntity.getUUID();
       boolean isArmed = Main.entityArmStates.getOrDefault(uuid, false);
       if (isArmed) {
         DroneState playerOrientation = DroneState.getInterpolated(
           uuid,
-          (float) event.getRenderPartialTicks()
+          (float) event.getPartialTicks()
         );
         float[] angles = playerOrientation.getAngles();
         float cameraYaw = angles[3];
@@ -136,7 +137,7 @@ public class CameraManager {
   
     //    Main.LOGGER.info("elapsed: " + 1f / elapsed);
     Minecraft minecraft = Minecraft.getInstance();
-    PlayerEntity player = minecraft.player;
+    Player player = minecraft.player;
     if (minecraft.level != null &&
         player != null &&
         !minecraft.isPaused()) {
@@ -146,13 +147,12 @@ public class CameraManager {
           // because physics just finished running before this function
           // was called.
           
-          Object o = minecraft.getCameraEntity() ==
+          Entity entity = minecraft.getCameraEntity() ==
                      null ? minecraft.player : minecraft.getCameraEntity();
-          
-          if (o instanceof Entity) {
+          if (entity != null) {
             minecraft.gameRenderer.getMainCamera().setup(
               minecraft.level,
-              (Entity) o,
+              entity,
               !minecraft.options.getCameraType().isFirstPerson(),
               minecraft.options.getCameraType().isMirrored(),
               1
@@ -214,9 +214,9 @@ public class CameraManager {
         
         // Set camera distance (third person or first person):
         if (minecraft.options.getCameraType() ==
-            PointOfView.THIRD_PERSON_BACK) {
-          ActiveRenderInfo info = event.getInfo();
-          double partialTicks = event.getRenderPartialTicks();
+            CameraType.THIRD_PERSON_BACK) {
+          Camera info = event.getCamera();
+          double partialTicks = event.getPartialTicks();
           Entity renderViewEntity = info.getEntity();
           
           // Set direction according to drone camera
@@ -224,22 +224,22 @@ public class CameraManager {
           
           // Reset camera position according to how it is done in ActiveRenderInfo.update();
           info.setPosition(
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.xo,
               renderViewEntity.getX()
             ),
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.yo,
               renderViewEntity.getY()
             ) +
-            (double) MathHelper.lerp(
+            Mth.lerp(
               partialTicks,
               info.eyeHeightOld,
               info.eyeHeight
             ),
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.zo,
               renderViewEntity.getZ()
@@ -247,12 +247,12 @@ public class CameraManager {
           );
           
           // Move the camera the same way it's done in ActiveRenderInfo.update() but with a different startingDistance.
-          event.getInfo().move(-event.getInfo()
+          event.getCamera().move(-event.getCamera()
             .getMaxZoom(0.5), 0.0D, 0.0D);
         } else if (minecraft.options.getCameraType() ==
-                   PointOfView.THIRD_PERSON_FRONT) {
-          ActiveRenderInfo info = event.getInfo();
-          double partialTicks = event.getRenderPartialTicks();
+                   CameraType.THIRD_PERSON_FRONT) {
+          Camera info = event.getCamera();
+          double partialTicks = event.getPartialTicks();
           Entity renderViewEntity = info.getEntity();
           
           // Set direction according to drone camera
@@ -263,22 +263,22 @@ public class CameraManager {
           
           // Reset camera position according to how it is done in ActiveRenderInfo.update();
           info.setPosition(
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.xo,
               renderViewEntity.getX()
             ),
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.yo,
               renderViewEntity.getY()
             ) +
-            (double) MathHelper.lerp(
+            Mth.lerp(
               partialTicks,
               info.eyeHeightOld,
               info.eyeHeight
             ),
-            MathHelper.lerp(
+            Mth.lerp(
               (double) partialTicks,
               renderViewEntity.zo,
               renderViewEntity.getZ()
@@ -286,7 +286,7 @@ public class CameraManager {
           );
           
           // Move the camera the same way it's done in ActiveRenderInfo.update() but with a different startingDistance.
-          event.getInfo().move(-event.getInfo()
+          event.getCamera().move(-event.getCamera()
             .getMaxZoom(0.5), 0.0D, 0.0D);
         }
       }

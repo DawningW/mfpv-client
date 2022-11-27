@@ -6,10 +6,10 @@ import com.gluecode.fpvdrone.gui.screen.addon.DoneFooter;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class CompleteScreen extends EmptyListScreen {
   public enum Mode {
@@ -54,12 +54,12 @@ public class CompleteScreen extends EmptyListScreen {
   protected void init() {
     super.init();
     
-    this.addButton(new Button(
+    this.addRenderableWidget(new Button(
       this.width / 2 - WizardConfig.wideButtonWidth / 2,
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 40 + WizardConfig.doubleButtonSpacing + 2,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.wizard.complete.more")),
+      new TextComponent(I18n.get("fpvdrone.wizard.complete.more")),
       this::handleMore
     ));
   }

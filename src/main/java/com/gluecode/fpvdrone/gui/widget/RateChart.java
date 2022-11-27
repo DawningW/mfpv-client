@@ -4,17 +4,15 @@ import com.gluecode.fpvdrone.input.ControllerConfig;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.render.StickOverlayRenderer;
 import com.gluecode.fpvdrone.util.Transforms;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.StringTextComponent;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
-public class RateChart extends Widget {
+public class RateChart extends AbstractWidget {
   private boolean showYaw;
   private boolean showPitch;
   private boolean showRoll;
@@ -25,7 +23,7 @@ public class RateChart extends Widget {
     int width,
     int height
   ) {
-    super(x, y, width, height, new StringTextComponent("Rates"));
+    super(x, y, width, height, new TextComponent("Rates"));
     this.showYaw = true;
     this.showPitch = true;
     this.showRoll = true;
@@ -33,9 +31,9 @@ public class RateChart extends Widget {
   }
   
   public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
-    buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
+    buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
 
     matrixStack.pushPose();
     matrixStack.translate(this.x, this.y + this.height, 0);
@@ -117,13 +115,13 @@ public class RateChart extends Widget {
     matrixStack.popPose();
 
     StickOverlayRenderer.applyLineMode();
-    tessellator.end();
+    tesselator.end();
     StickOverlayRenderer.cleanLineMode();
     
 //    super.render(matrixStack, mouseX, mouseY, partialTicks);
   }
   
-  protected void renderBg(PoseStack matrixStack, Minecraft minecraft, int mouseX, int mouseY) {
+  protected void renderBg(@NotNull PoseStack matrixStack, @NotNull Minecraft minecraft, int mouseX, int mouseY) {
   }
   
   private void renderCurve(Matrix4f matrix, BufferBuilder buffer, float setpoint, float crate, float csuper, float cexpo, float max, int color) {
@@ -154,5 +152,10 @@ public class RateChart extends Widget {
       buffer.vertex(matrix, pxprev, pyprev, 0).color(r, g, b, 1f).endVertex();
       buffer.vertex(matrix, px, py, 0).color(r, g, b, 1f).endVertex();
     }
+  }
+
+  @Override
+  public void updateNarration(@NotNull NarrationElementOutput output) {
+    // todo: Narration for RateChart
   }
 }

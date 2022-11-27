@@ -1,4 +1,4 @@
-package com.gluecode.fpvdrone.gui.list;
+package com.gluecode.fpvdrone.gui.widget.list;
 
 import com.gluecode.fpvdrone.gui.screen.RatesScreen;
 import com.gluecode.fpvdrone.gui.entry.CategoryEntry;
@@ -6,7 +6,7 @@ import com.gluecode.fpvdrone.gui.entry.FloatEntry;
 import com.gluecode.fpvdrone.input.ControllerConfig;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.util.Transforms;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public class RatesList extends FPVList {
   public RatesList(RatesScreen controls) {

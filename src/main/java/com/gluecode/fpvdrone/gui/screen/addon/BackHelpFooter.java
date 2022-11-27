@@ -3,12 +3,12 @@ package com.gluecode.fpvdrone.gui.screen.addon;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.screen.ConfirmOpenLinkScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.Util;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class BackHelpFooter extends ScreenAddon {
   
@@ -17,7 +17,7 @@ public class BackHelpFooter extends ScreenAddon {
   }
   
   public void handleDiscord(Screen screen) {
-    screen.getMinecraft().setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+    screen.getMinecraft().setScreen(new ConfirmLinkScreen((p_244739_1_) -> {
       if (p_244739_1_) {
         Util.getPlatform().openUri(
           "https://discord.gg/WJfhXuz");
@@ -27,7 +27,7 @@ public class BackHelpFooter extends ScreenAddon {
   }
   
   public void handleWiki(Screen screen) {
-    screen.getMinecraft().setScreen(new ConfirmOpenLinkScreen((p_244739_1_) -> {
+    screen.getMinecraft().setScreen(new ConfirmLinkScreen((p_244739_1_) -> {
       if (p_244739_1_) {
         Util.getPlatform().openUri(
           "https://minecraftfpv.com/wiki");
@@ -43,30 +43,30 @@ public class BackHelpFooter extends ScreenAddon {
     int padding = 8;
     int btnWidth = (width - (nButtons - 1) * padding) / nButtons;
     
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       WizardConfig.left,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("gui.back")),
+      new TextComponent(I18n.get("gui.back")),
       (Button button) -> this.handleBack(screen)
     ));
     
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       screen.width - 2 * WizardConfig.shortButtonWidth - 2 * WizardConfig.right,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.shortButtonWidth,
       20,
-      new StringTextComponent("Discord"),
+      new TextComponent("Discord"),
       (Button button) -> this.handleDiscord(screen)
     ));
     
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       screen.width - WizardConfig.shortButtonWidth - WizardConfig.right,
       screen.height - 20 - WizardConfig.footerBottom,
       WizardConfig.shortButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.settings.wiki")),
+      new TextComponent(I18n.get("fpvdrone.settings.wiki")),
       (Button button) -> this.handleWiki(screen)
     ));
   }

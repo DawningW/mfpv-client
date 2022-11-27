@@ -1,13 +1,11 @@
 package com.gluecode.fpvdrone.gui.screen;
 
-import com.gluecode.fpvdrone.gui.list.DroneBuildList;
+import com.gluecode.fpvdrone.gui.widget.list.DroneBuildList;
 import com.gluecode.fpvdrone.gui.screen.addon.DoneFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.ServerTitleWikiHeader;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.*;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 
 public class DroneBuildScreen extends FpvScreen {
   private DroneBuildList droneBuildList;
@@ -27,7 +25,7 @@ public class DroneBuildScreen extends FpvScreen {
   protected void init() {
     super.init();
     this.droneBuildList = new DroneBuildList(this);
-    this.children.add(this.droneBuildList);
+    this.addWidget(this.droneBuildList);
   }
 
   // func_230430_a_ = render

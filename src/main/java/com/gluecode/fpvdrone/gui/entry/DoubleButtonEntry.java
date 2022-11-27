@@ -1,15 +1,15 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -36,8 +36,8 @@ public class DoubleButtonEntry extends FPVEntry {
       0,
       80,
       20,
-      new StringTextComponent(leftLabel),
-      (@Nullable Button button) -> {
+      new TextComponent(leftLabel),
+      (Button button) -> {
         onLeft.run();
       }
     );
@@ -46,8 +46,8 @@ public class DoubleButtonEntry extends FPVEntry {
       0,
       80,
       20,
-      new StringTextComponent(rightLabel),
-      (@Nullable Button button) -> {
+      new TextComponent(rightLabel),
+      (Button button) -> {
         onRight.run();
       }
     );
@@ -61,7 +61,7 @@ public class DoubleButtonEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -101,7 +101,12 @@ public class DoubleButtonEntry extends FPVEntry {
   }
   
   @Override
-  public List<? extends IGuiEventListener> children() {
+  public @NotNull List<? extends GuiEventListener> children() {
     return ImmutableList.of(this.changeButton, this.configureButton);
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

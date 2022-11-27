@@ -87,7 +87,7 @@ public class KeyMappingInterceptor extends KeyMapping {
     copyKeyCodeToOriginal();
     copyClickInfoFromOriginal();
     
-    Main.LOGGER.info("interceptionActive: " + interceptionActive);
+    Main.LOGGER.debug("interceptionActive: " + interceptionActive);
     
     if (interceptionActive) {
       this.clickCount = 0;

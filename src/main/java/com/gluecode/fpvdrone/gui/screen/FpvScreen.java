@@ -2,17 +2,18 @@ package com.gluecode.fpvdrone.gui.screen;
 
 import com.gluecode.fpvdrone.gui.screen.addon.ScreenAddon;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Options;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.SettingsScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public abstract class FpvScreen extends SettingsScreen {
+public abstract class FpvScreen extends OptionsSubScreen {
   @Nullable
   public Screen previousScreen;
   @Nullable
@@ -28,7 +29,7 @@ public abstract class FpvScreen extends SettingsScreen {
     super(
       previousScreen,
       Minecraft.getInstance().options,
-      new StringTextComponent("")
+      new TextComponent("")
     );
     this.previousScreen = previousScreen;
     this.header = header;
@@ -44,12 +45,12 @@ public abstract class FpvScreen extends SettingsScreen {
       this.footer.init(this);
     }
   }
-  
+
   @Override
-  public <T extends Widget> T addButton(T button) { // Access widener
-    return super.addButton(button);
+  public <T extends GuiEventListener & Widget & NarratableEntry> @NotNull T addRenderableWidget(@NotNull T widget) { // Access widener
+    return super.addRenderableWidget(widget);
   }
-  
+
   abstract public void renderCustom(
     PoseStack matrixStack,
     int mouseX,
@@ -59,7 +60,7 @@ public abstract class FpvScreen extends SettingsScreen {
   
   @Override
   public void render(
-    PoseStack matrixStack,
+    @NotNull PoseStack matrixStack,
     int mouseX,
     int mouseY,
     float partialTicks

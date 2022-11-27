@@ -1,12 +1,14 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.gluecode.fpvdrone.input.ControllerReader;
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -33,7 +35,7 @@ public class CategoryEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -72,9 +74,14 @@ public class CategoryEntry extends FPVEntry {
       this.color
     );
   }
-  
+
   @Override
-  public List<? extends IGuiEventListener> children() {
-    return Collections.emptyList();
+  public @NotNull List<? extends GuiEventListener> children() {
+    return ImmutableList.of();
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

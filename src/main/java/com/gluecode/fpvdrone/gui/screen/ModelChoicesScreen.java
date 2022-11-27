@@ -1,18 +1,18 @@
 package com.gluecode.fpvdrone.gui.screen;
 
-import com.gluecode.fpvdrone.gui.list.ModelChoiceList;
+import com.gluecode.fpvdrone.gui.widget.list.ModelChoiceList;
 import com.gluecode.fpvdrone.gui.screen.addon.DoneFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.ServerTitleWikiHeader;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.gluecode.fpvdrone.util.SettingsLoader;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -38,7 +38,7 @@ public class ModelChoicesScreen extends FpvScreen {
   }
   
   @SubscribeEvent
-  public void charTyped(GuiScreenEvent.KeyboardCharTypedEvent.Pre event) {
+  public void charTyped(ScreenEvent.KeyboardCharTypedEvent.Pre event) {
     if (editMode) {
       if (this.editValue.length() < 24) {
         this.editValue = this.editValue + event.getCodePoint();
@@ -51,23 +51,23 @@ public class ModelChoicesScreen extends FpvScreen {
     super.init();
     this.generateList();
     
-    this.nameButton = this.addButton(new Button(
+    this.nameButton = this.addRenderableWidget(new Button(
       WizardConfig.left,
       this.height - 20 - WizardConfig.footerBottom,
       WizardConfig.wideButtonWidth * 2,
       20,
-      new StringTextComponent(this.editValue),
+      new TextComponent(this.editValue),
       this::handleNewPress
     ));
   }
   
   public void generateList() {
     if (this.list != null) {
-      this.children.remove(this.list);
+      this.removeWidget(this.list);
     }
     
     this.list = new ModelChoiceList(this);
-    this.children.add(this.list);
+    this.addWidget(this.list);
   }
   
   public boolean keyPressed(
@@ -75,7 +75,7 @@ public class ModelChoicesScreen extends FpvScreen {
     int p_keyPressed_2_,
     int p_keyPressed_3_
   ) {
-    InputMappings.Input input = InputMappings.getKey(
+    InputConstants.Key input = InputConstants.getKey(
       p_keyPressed_1_,
       p_keyPressed_2_
     );
@@ -127,7 +127,7 @@ public class ModelChoicesScreen extends FpvScreen {
   ) {
     this.list.render(matrixStack, mouseX, mouseY, partialTicks);
     this.nameButton.setMessage(
-      new StringTextComponent(this.editMode ? "> " +
+      new TextComponent(this.editMode ? "> " +
                                               this.editValue +
                                               "_ <" : this.editValue));
     this.nameButton.render(matrixStack, mouseX, mouseY, partialTicks);

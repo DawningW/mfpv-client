@@ -3,8 +3,8 @@ package com.gluecode.fpvdrone.network.packet;
 import com.gluecode.fpvdrone.Main;
 import com.gluecode.fpvdrone.entity.DroneBuild;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -182,7 +182,7 @@ public class DroneBuildPacket {
     DroneBuildPacket msg,
     Supplier<NetworkEvent.Context> contextSupplier
   ) {
-    PlayerEntity player = Minecraft.getInstance().player;
+    Player player = Minecraft.getInstance().player;
     if (player == null || !msg.userId.equals(player.getUUID())) {
       // Do not set self because when self sends the packet, it will echo back.
       // The echoed packet is out-of-date compared to self.

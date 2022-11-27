@@ -1,4 +1,4 @@
-package com.gluecode.fpvdrone.gui.list;
+package com.gluecode.fpvdrone.gui.widget.list;
 
 import com.gluecode.fpvdrone.entity.DroneBuild;
 import com.gluecode.fpvdrone.gui.entry.BooleanEntry;
@@ -9,7 +9,7 @@ import com.gluecode.fpvdrone.gui.screen.DroneBuildScreen;
 import com.gluecode.fpvdrone.physics.PhysicsConstants;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.gluecode.fpvdrone.util.Transforms;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public class DroneBuildList extends FPVList {
   public DroneBuildList(DroneBuildScreen parentScreen) {

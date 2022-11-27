@@ -1,9 +1,9 @@
 package com.gluecode.fpvdrone.gui.widget;
 
 import com.jme3.math.FastMath;
-import net.minecraft.client.gui.widget.AbstractSlider;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.network.chat.TextComponent;
 
 import java.text.DecimalFormat;
 import java.util.function.Consumer;
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 
 // todo: use abstract slider
-public class SnappySlider extends AbstractSlider {
+public class SnappySlider extends AbstractSliderButton {
   private Consumer<Widget> onClick;
   private Consumer<Float> setNewValue;
   private Supplier<Float> getMin;
@@ -31,7 +31,7 @@ public class SnappySlider extends AbstractSlider {
     Consumer<Float> setNewValue,
     Consumer<Widget> onClick
   ) {
-    super(xIn, yIn, width, height, new StringTextComponent(""), lerpValue);
+    super(xIn, yIn, width, height, new TextComponent(""), lerpValue);
     this.getMin = getMin;
     this.getMax = getMax;
     this.setNewValue = setNewValue;
@@ -66,7 +66,7 @@ public class SnappySlider extends AbstractSlider {
     df.setMaximumFractionDigits(2);
     String str = df.format(value);
     //        this.setMessage(new StringTextComponent(Integer.toString((int) FastMath.floor(value))));
-    this.setMessage(new StringTextComponent(str));
+    this.setMessage(new TextComponent(str));
   }
 
 

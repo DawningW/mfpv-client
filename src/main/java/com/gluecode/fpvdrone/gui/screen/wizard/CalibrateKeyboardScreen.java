@@ -7,17 +7,15 @@ import com.gluecode.fpvdrone.gui.screen.addon.BackProceedFooter;
 import com.gluecode.fpvdrone.gui.screen.addon.WizardHeader;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.input.KeyManager;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.list.KeyMappingList;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 
 public class CalibrateKeyboardScreen extends EmptyListScreen {
   private Button keyButton;
@@ -56,11 +54,11 @@ public class CalibrateKeyboardScreen extends EmptyListScreen {
     // copied from ControlsScreen.keyPressed:
     if (this.listening) {
       if (keyCode == 256) {
-        KeyManager.armKey.setKeyModifierAndCode(net.minecraftforge.client.settings.KeyModifier.getActiveModifier(), InputMappings.UNKNOWN);
-        this.options.setKey(KeyManager.armKey, InputMappings.UNKNOWN);
+        KeyManager.armKey.setKeyModifierAndCode(net.minecraftforge.client.settings.KeyModifier.getActiveModifier(), InputConstants.UNKNOWN);
+        this.options.setKey(KeyManager.armKey, InputConstants.UNKNOWN);
       } else {
-        KeyManager.armKey.setKeyModifierAndCode(net.minecraftforge.client.settings.KeyModifier.getActiveModifier(), InputMappings.getKey(keyCode, scanCode));
-        this.options.setKey(KeyManager.armKey, InputMappings.getKey(keyCode, scanCode));
+        KeyManager.armKey.setKeyModifierAndCode(net.minecraftforge.client.settings.KeyModifier.getActiveModifier(), InputConstants.getKey(keyCode, scanCode));
+        this.options.setKey(KeyManager.armKey, InputConstants.getKey(keyCode, scanCode));
       }
 
       if (!net.minecraftforge.client.settings.KeyModifier.isKeyCodeModifier(KeyManager.armKey.getKey())) {
@@ -90,7 +88,7 @@ public class CalibrateKeyboardScreen extends EmptyListScreen {
       this::handleKeyButtonClick
     );
   
-    this.addButton(this.keyButton);
+    this.addRenderableWidget(this.keyButton);
   }
   
   @Override
@@ -130,13 +128,13 @@ public class CalibrateKeyboardScreen extends EmptyListScreen {
     this.keyButton.setMessage(KeyManager.armKey.getTranslatedKeyMessage());
     
     if (listening) {
-      this.keyButton.setMessage((new StringTextComponent("> ")).append(this.keyButton.getMessage().copy().withStyle(
-        TextFormatting.YELLOW)).append(" <").withStyle(TextFormatting.YELLOW));
+      this.keyButton.setMessage((new TextComponent("> ")).append(this.keyButton.getMessage().copy().withStyle(
+        ChatFormatting.YELLOW)).append(" <").withStyle(ChatFormatting.YELLOW));
     } else {
       boolean[] conflicts = this.getConflicts();
       if (conflicts[0]) {
         boolean keyCodeModifierConflict = conflicts[1];
-        this.keyButton.setMessage(this.keyButton.getMessage().copy().withStyle(keyCodeModifierConflict ? TextFormatting.GOLD : TextFormatting.RED));
+        this.keyButton.setMessage(this.keyButton.getMessage().copy().withStyle(keyCodeModifierConflict ? ChatFormatting.GOLD : ChatFormatting.RED));
       }
     }
   
@@ -162,7 +160,7 @@ public class CalibrateKeyboardScreen extends EmptyListScreen {
       for(KeyMapping keybinding : minecraft.options.keyMappings) {
         if (keybinding != KeyManager.armKey && KeyManager.armKey.same(keybinding)) {
           results[0] = true;
-          results[1] &= KeyManager.armKey.hasKeyCodeModifierConflict(keybinding);
+          results[1] &= KeyManager.armKey.hasKeyModifierConflict(keybinding);
         }
       }
     }

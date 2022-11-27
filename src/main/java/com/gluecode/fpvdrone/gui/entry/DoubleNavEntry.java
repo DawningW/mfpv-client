@@ -1,15 +1,15 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class DoubleNavEntry extends FPVEntry {
@@ -29,7 +29,7 @@ public class DoubleNavEntry extends FPVEntry {
       0,
       150,
       20,
-      new StringTextComponent(leftName),
+      new TextComponent(leftName),
       (Button button) -> {
         onLeftSelect.run();
       }
@@ -39,7 +39,7 @@ public class DoubleNavEntry extends FPVEntry {
       0,
       150,
       20,
-      new StringTextComponent(rightName),
+      new TextComponent(rightName),
       (Button button) -> {
         onRightSelect.run();
       }
@@ -54,7 +54,7 @@ public class DoubleNavEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -75,7 +75,12 @@ public class DoubleNavEntry extends FPVEntry {
   }
   
   @Override
-  public List<? extends IGuiEventListener> children() {
+  public @NotNull List<? extends GuiEventListener> children() {
     return ImmutableList.of(this.leftButton, this.rightButton);
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

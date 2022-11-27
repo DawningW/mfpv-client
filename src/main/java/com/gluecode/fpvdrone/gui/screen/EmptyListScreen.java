@@ -1,9 +1,9 @@
 package com.gluecode.fpvdrone.gui.screen;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.gluecode.fpvdrone.gui.screen.addon.ScreenAddon;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 
 import javax.annotation.Nullable;
 

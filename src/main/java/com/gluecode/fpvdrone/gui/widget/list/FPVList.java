@@ -1,12 +1,12 @@
-package com.gluecode.fpvdrone.gui.list;
+package com.gluecode.fpvdrone.gui.widget.list;
 
 import com.gluecode.fpvdrone.gui.entry.FPVEntry;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.list.AbstractOptionList;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
 
-public class FPVList extends AbstractOptionList<FPVEntry> {
+public class FPVList extends ContainerObjectSelectionList<FPVEntry> {
   public FPVEntry activeEntry = null;
   public Screen parentScreen;
   

@@ -5,21 +5,18 @@ import com.gluecode.fpvdrone.entity.DroneBuild;
 import com.gluecode.fpvdrone.entity.DroneModel;
 import com.gluecode.fpvdrone.physics.PhysicsState;
 import com.jme3.math.FastMath;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 
 public class BlurryPropRenderer {
@@ -41,7 +38,7 @@ public class BlurryPropRenderer {
   );
   
   public static void render(
-    PlayerEntity entity,
+    Player entity,
     PoseStack matrixStack,
     int packedLightIn,
     int packedOverlayIn,
@@ -200,10 +197,10 @@ public class BlurryPropRenderer {
     float n1 = vector3f.y();
     float n2 = vector3f.z();
     
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder buffer = tessellator.getBuilder();
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder buffer = tesselator.getBuilder();
     
-    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.NEW_ENTITY);
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
     buffer.vertex(
       p4.x(),
       p4.y(),
@@ -334,28 +331,20 @@ public class BlurryPropRenderer {
       -n1,
       -n2
     );
-    
+
     int nBlades = build.nBlades;
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     if (nBlades == 2) {
-      Minecraft
-        .getInstance()
-        .getEntityRenderDispatcher().textureManager.bind(TEXTURE_2);
+      RenderSystem.setShaderTexture(0, TEXTURE_2);
     } else if (nBlades == 3) {
-      Minecraft
-        .getInstance()
-        .getEntityRenderDispatcher().textureManager.bind(TEXTURE_3);
+      RenderSystem.setShaderTexture(0, TEXTURE_3);
     } else if (nBlades == 4) {
-      Minecraft
-        .getInstance()
-        .getEntityRenderDispatcher().textureManager.bind(TEXTURE_4);
+      RenderSystem.setShaderTexture(0, TEXTURE_4);
     } else if (nBlades == 5) {
-      Minecraft
-        .getInstance()
-        .getEntityRenderDispatcher().textureManager.bind(TEXTURE_5);
+      RenderSystem.setShaderTexture(0, TEXTURE_5);
     } else {
-      Minecraft
-        .getInstance()
-        .getEntityRenderDispatcher().textureManager.bind(TEXTURE_3);
+      RenderSystem.setShaderTexture(0, TEXTURE_3);
     }
     
     boolean originalDepthTest = GL11.glGetBoolean(GL11.GL_DEPTH_TEST);
@@ -368,17 +357,17 @@ public class BlurryPropRenderer {
       GlStateManager.SourceFactor.ONE,
       GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
     );
-    RenderHelper.turnBackOn();
+//    RenderHelper.turnBackOn();
     Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
     
-    tessellator.end();
+    tesselator.end();
     
     if (!originalDepthTest) {
       RenderSystem.disableDepthTest();
     }
     RenderSystem.disableBlend();
     RenderSystem.defaultBlendFunc();
-    RenderHelper.turnOff();
+//    RenderHelper.turnOff();
     Minecraft.getInstance().gameRenderer
       .lightTexture()
       .turnOffLightLayer();

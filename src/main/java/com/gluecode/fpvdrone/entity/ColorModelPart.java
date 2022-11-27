@@ -3,22 +3,26 @@ package com.gluecode.fpvdrone.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.geom.ModelPart;
 
-public class ColorModelRenderer extends ModelRenderer {
+import java.util.List;
+import java.util.Map;
+
+public class ColorModelPart extends ModelPart {
   public float red;
   public float green;
   public float blue;
   public float alpha;
   
-  public ColorModelRenderer(
-    Model model,
+  public ColorModelPart(
+    List<ModelPart.Cube> cubes,
+    Map<String, ModelPart> children,
     float red,
     float green,
     float blue,
     float alpha
   ) {
-    super(model);
+    super(cubes, children);
     this.red = red;
     this.green = green;
     this.blue = blue;
@@ -27,7 +31,7 @@ public class ColorModelRenderer extends ModelRenderer {
   
   @Override
   public void compile(
-    PoseStack.Entry matrixEntryIn,
+    PoseStack.Pose matrixEntryIn,
     VertexConsumer bufferIn,
     int packedLightIn,
     int packedOverlayIn,

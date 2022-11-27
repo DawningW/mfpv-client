@@ -1,15 +1,17 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -43,7 +45,7 @@ public class BooleanEntry extends FPVEntry {
       0,
       70,
       20,
-      new StringTextComponent(name),
+      new TextComponent(name),
       this::handleChangePress
     );
     this.resetButton = new Button(
@@ -51,7 +53,7 @@ public class BooleanEntry extends FPVEntry {
       0,
       50,
       20,
-      new StringTextComponent(I18n.get("controls.reset")),
+      new TextComponent(I18n.get("controls.reset")),
       this::handleResetPress
     );
     this.editMode = false;
@@ -65,7 +67,7 @@ public class BooleanEntry extends FPVEntry {
   @Override
   public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -97,14 +99,14 @@ public class BooleanEntry extends FPVEntry {
     this.changeButton.y = rowTop;
     
     this.changeButton.setMessage(
-      new StringTextComponent("" + this.getValue.get())
+      new TextComponent("" + this.getValue.get())
     );
     
     this.changeButton.render(matrixStack, mouseX, mouseY, partialTicks);
   }
   
   @Override
-  public List<? extends IGuiEventListener> children() {
+  public @NotNull List<? extends GuiEventListener> children() {
     return ImmutableList.of(this.changeButton, this.resetButton);
   }
   
@@ -118,5 +120,10 @@ public class BooleanEntry extends FPVEntry {
   public void handleResetPress(Button button) {
     this.setDefaultValue.run();
     SettingsLoader.save();
+  }
+
+  @Override
+  public @NotNull List<? extends NarratableEntry> narratables() {
+    return ImmutableList.of();
   }
 }

@@ -4,22 +4,22 @@ import com.gluecode.fpvdrone.Main;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.UUID;
 
-public class DronePropsLayer<DroneEntity extends LivingEntity> extends LayerRenderer<AbstractClientPlayer, DroneModel<AbstractClientPlayer>> {
+public class DronePropsLayer<DroneEntity extends LivingEntity> extends RenderLayer<AbstractClientPlayer, DroneModel<AbstractClientPlayer>> {
   private final DroneModel<AbstractClientPlayer> droneModel;
   
   public DronePropsLayer(
+    RenderLayerParent<AbstractClientPlayer, DroneModel<AbstractClientPlayer>> entityRendererIn,
     UUID uuid,
-    IEntityRenderer<AbstractClientPlayer, DroneModel<AbstractClientPlayer>> entityRendererIn,
     DroneBuild build
   ) {
     super(entityRendererIn);
@@ -34,7 +34,7 @@ public class DronePropsLayer<DroneEntity extends LivingEntity> extends LayerRend
   @Override
   public void render(
     PoseStack matrixStackIn,
-    IRenderTypeBuffer bufferIn,
+    MultiBufferSource bufferIn,
     int packedLightIn,
     AbstractClientPlayer entitylivingbaseIn,
     float limbSwing,
@@ -60,7 +60,7 @@ public class DronePropsLayer<DroneEntity extends LivingEntity> extends LayerRend
         netHeadYaw,
         headPitch
       );
-      //            VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucentCull(this.getEntityTexture(entitylivingbaseIn)));
+      // VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucentCull(this.getEntityTexture(entitylivingbaseIn)));
       
       VertexConsumer ivertexbuilder;
 //      if (this.blur) {

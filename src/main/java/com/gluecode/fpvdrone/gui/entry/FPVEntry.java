@@ -1,14 +1,13 @@
 package com.gluecode.fpvdrone.gui.entry;
 
-import com.gluecode.fpvdrone.Main;
-import com.gluecode.fpvdrone.gui.list.FPVList;
+import com.gluecode.fpvdrone.gui.widget.list.FPVList;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.list.AbstractOptionList;
-import net.minecraft.client.util.InputMappings;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
@@ -16,7 +15,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class FPVEntry extends AbstractOptionList.Entry<FPVEntry> {
+public abstract class FPVEntry extends ContainerObjectSelectionList.Entry<FPVEntry> {
   public FPVList list;
   public String name;
   public String editValue = "";
@@ -49,7 +48,7 @@ public abstract class FPVEntry extends AbstractOptionList.Entry<FPVEntry> {
     int scanCode,
     int modifiers
   ) {
-    InputMappings.Input input = InputMappings.getKey(
+    InputConstants.Key input = InputConstants.getKey(
       keyCode,
       scanCode
     );
@@ -89,7 +88,7 @@ public abstract class FPVEntry extends AbstractOptionList.Entry<FPVEntry> {
   
   abstract public void betterRender(
     PoseStack matrixStack,
-    FontRenderer fontRenderer,
+    Font fontRenderer,
     int rowIndex,
     int rowTop,
     int rowLeft,
@@ -124,7 +123,7 @@ public abstract class FPVEntry extends AbstractOptionList.Entry<FPVEntry> {
       }
     }
   
-    FontRenderer fontRenderer = minecraft.font;
+    Font fontRenderer = minecraft.font;
     
     betterRender(matrixStack, fontRenderer, rowIndex, rowTop, rowLeft, rowWidth, rowHeight, mouseX, mouseY, isMouseOver, partialTicks);
   }

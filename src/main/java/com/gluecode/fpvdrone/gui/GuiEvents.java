@@ -8,17 +8,18 @@ import com.gluecode.fpvdrone.gui.screen.*;
 import com.gluecode.fpvdrone.input.ControllerReader;
 import com.gluecode.fpvdrone.util.SettingsLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ControlsScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.SettingsScreen;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 
@@ -26,18 +27,16 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Main.MOD_ID)
 public class GuiEvents {
   public static final Field gameSettings = ObfuscationReflectionHelper.findField(
-    SettingsScreen.class,
-    "field_228183_b_"
+    OptionsSubScreen.class,
+    "f_96282_"
   );
 
   @SubscribeEvent
-  public static void onOpenGui(GuiScreenEvent.InitGuiEvent.Post event) {
-    if (event.getGui() instanceof ControlsScreen) {
-      ControlsScreen screen = (ControlsScreen) event.getGui();
-
+  public static void onOpenGui(ScreenEvent.InitScreenEvent.Post event) {
+    if (event.getScreen() instanceof ControlsScreen) {
+      ControlsScreen screen = (ControlsScreen) event.getScreen();
       int screenWidth = screen.width;
-
-      event.addWidget(new FpvSettingsButton((screenWidth / 2) +
+      event.addListener(new FpvSettingsButton((screenWidth / 2) +
                                             5 +
                                             150 +
                                             4, 18,
@@ -54,16 +53,15 @@ public class GuiEvents {
   }
 
   @SubscribeEvent
-  public static void onRenderGameOverlay(RenderGameOverlayEvent event) {
+  public static void onRenderGameOverlay(RenderGameOverlayEvent.PreLayer event) {
     if (ControllerReader.getArm()) {
       if (
-        event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR
-        //                event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE
-        //                event.getType() == RenderGameOverlayEvent.ElementType.FOOD
+        event.getOverlay() == ForgeIngameGui.HOTBAR_ELEMENT
+        // event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE
+        // event.getType() == RenderGameOverlayEvent.ElementType.FOOD
       ) {
         event.setCanceled(true);
-      } else if (event.getType() ==
-                 RenderGameOverlayEvent.ElementType.CROSSHAIRS &&
+      } else if (event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT &&
                  !CameraManager.getShowCrosshairs()) {
         event.setCanceled(true);
       }
@@ -142,8 +140,9 @@ public class GuiEvents {
   }
 
   public static void openChannelMappingScreen(ModelSettingsScreen screen) {
-    Minecraft.getInstance()
-      .setScreen(new ChannelMappingScreen(screen));
+    Minecraft.getInstance().setScreen(new ChannelMappingScreen(
+      screen
+    ));
   }
 
   public static void openRatesScreen(ModelSettingsScreen screen) {

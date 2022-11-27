@@ -9,15 +9,17 @@ import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -39,7 +41,7 @@ public class BarrelRenderer {
   public static ShaderProgram barrelShader = null;
   public static ShaderProgram copyShader = null;
   
-  public static Framebuffer targetFramebuffer = null;
+  public static RenderTarget targetFramebuffer = null;
   public static int framebufferTexture;
   
   public static void loadCopyShader() {
@@ -90,7 +92,7 @@ public class BarrelRenderer {
   }
   
   public static void createAndBindTexture() {
-    Framebuffer defaultFramebuffer = Minecraft.getInstance()
+    RenderTarget defaultFramebuffer = Minecraft.getInstance()
       .getMainRenderTarget();
     int width = defaultFramebuffer.width;
     int height = defaultFramebuffer.height;
@@ -148,7 +150,7 @@ public class BarrelRenderer {
       );
       GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
       
-      targetFramebuffer = new Framebuffer(width, height, false, false);
+      targetFramebuffer = new TextureTarget(width, height, false, false);
       targetFramebuffer.bindWrite(false);
       GL11.glViewport(
         0,
@@ -179,7 +181,7 @@ public class BarrelRenderer {
   and saves it in our custom framebufferTexture
   * */
   public static void saveRenderPass() {
-    Framebuffer defaultFramebuffer = Minecraft.getInstance()
+    RenderTarget defaultFramebuffer = Minecraft.getInstance()
       .getMainRenderTarget();
     int defaultFramebufferTexture = defaultFramebuffer.getColorTextureId();
     
@@ -198,7 +200,7 @@ public class BarrelRenderer {
     
     boolean originalAlphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST);
     boolean originalBlendMode = GL11.glGetBoolean(GL11.GL_BLEND);
-    RenderSystem.disableAlphaTest();
+//    RenderSystem.disableAlphaTest();
     RenderSystem.enableBlend();
     RenderSystem.blendFuncSeparate(
       GlStateManager.SourceFactor.ONE,
@@ -206,7 +208,7 @@ public class BarrelRenderer {
       GlStateManager.SourceFactor.SRC_ALPHA,
       GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
     );
-    
+
     // Setup GL:
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -256,7 +258,7 @@ public class BarrelRenderer {
     //    GlStateManager.viewport(0, 0, this.framebufferWidth, this.framebufferHeight);
     
     if (originalAlphaTest) {
-      RenderSystem.enableAlphaTest();
+//      RenderSystem.enableAlphaTest();
     }
     if (!originalBlendMode) {
       RenderSystem.disableBlend();
@@ -380,7 +382,7 @@ public class BarrelRenderer {
   //    }
   //  }
   
-  @SubscribeEvent(priority = EventPriority.HIGHEST)
+//  @SubscribeEvent(priority = EventPriority.HIGHEST)
   public static void handleGateRendering(RenderGameOverlayEvent.Pre event) {
     if (!ControllerReader.getArm()) return;
     if (!SettingsLoader.currentUseFisheye) return;

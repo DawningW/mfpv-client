@@ -10,12 +10,12 @@ import com.gluecode.fpvdrone.util.SettingsLoader;
 import com.jme3.math.FastMath;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
 
 public class CalibrateControllerArmScreen extends EmptyListScreen {
   private enum Step {
@@ -54,7 +54,7 @@ public class CalibrateControllerArmScreen extends EmptyListScreen {
       SettingsLoader.save();
   
       Minecraft minecraft = Minecraft.getInstance();
-      minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+      minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
       
       this.onProceed();
     });
@@ -67,7 +67,7 @@ public class CalibrateControllerArmScreen extends EmptyListScreen {
         lastProceedTime = System.currentTimeMillis() + 500;
   
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
       }
       
       if (this.step == Step.PING || this.step == Step.FLIP) {
@@ -170,7 +170,7 @@ public class CalibrateControllerArmScreen extends EmptyListScreen {
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 40 + WizardConfig.doubleButtonSpacing + 2,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.wizard.calibrateControllerStick.retry")),
+      new TextComponent(I18n.get("fpvdrone.wizard.calibrateControllerStick.retry")),
       this::handleRetry
     );
   
@@ -179,12 +179,12 @@ public class CalibrateControllerArmScreen extends EmptyListScreen {
       WizardConfig.headerHeight + WizardConfig.contentTop + WizardConfig.titleSpacing + 40 + WizardConfig.doubleButtonSpacing + 2,
       WizardConfig.wideButtonWidth,
       20,
-      new StringTextComponent(I18n.get("fpvdrone.wizard.calibrateControllerArm.flipButton")),
+      new TextComponent(I18n.get("fpvdrone.wizard.calibrateControllerArm.flipButton")),
       this::handleFlip
     );
   
-    this.addButton(this.retryButton);
-    this.addButton(this.flipButton);
+    this.addRenderableWidget(this.retryButton);
+    this.addRenderableWidget(this.flipButton);
   }
   
   @Override

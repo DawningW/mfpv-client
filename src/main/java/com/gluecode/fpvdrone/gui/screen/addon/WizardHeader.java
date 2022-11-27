@@ -1,7 +1,6 @@
 package com.gluecode.fpvdrone.gui.screen.addon;
 
 import com.gluecode.fpvdrone.Main;
-import com.gluecode.fpvdrone.gui.GuiEvents;
 import com.gluecode.fpvdrone.gui.screen.FpvScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.HelpQAScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.HelpScreen;
@@ -9,13 +8,11 @@ import com.gluecode.fpvdrone.gui.screen.wizard.WelcomeScreen;
 import com.gluecode.fpvdrone.gui.screen.wizard.WizardConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.ConfirmOpenLinkScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -27,7 +24,7 @@ public class WizardHeader extends ScreenAddon {
   @Nullable
   public Runnable overrideOnDone;
   
-  public LinkedHashMap<String, ITextComponent> qa = null;
+  public LinkedHashMap<String, Component> qa = null;
   
   public WizardHeader(@Nullable String title, boolean showHelpButton) {
     this.title = title;
@@ -49,7 +46,7 @@ public class WizardHeader extends ScreenAddon {
     this.overrideOnDone = overrideOnDone;
   }
   
-  public void addHelpQA(String question, ITextComponent answer) {
+  public void addHelpQA(String question, Component answer) {
     if (qa == null) {
       qa = new LinkedHashMap<>();
     }
@@ -58,22 +55,22 @@ public class WizardHeader extends ScreenAddon {
   
   @Override
   public void init(FpvScreen screen) {
-    screen.addButton(new Button(
+    screen.addRenderableWidget(new Button(
       WizardConfig.left,
       WizardConfig.headerTop,
       20,
       20,
-      new StringTextComponent(""),
+      new TextComponent(""),
       (Button button) -> this.handleDone()
     ));
     
     if (this.showHelpButton) {
-      screen.addButton(new Button(
+      screen.addRenderableWidget(new Button(
         screen.width - WizardConfig.right - WizardConfig.shortButtonWidth,
         WizardConfig.headerTop,
         WizardConfig.shortButtonWidth,
         20,
-        new StringTextComponent(I18n.get("fpvdrone.wizard.header.help")),
+        new TextComponent(I18n.get("fpvdrone.wizard.header.help")),
         (Button button) -> {
           if (qa == null) {
             screen.getMinecraft().setScreen(new HelpScreen(screen));
@@ -94,7 +91,7 @@ public class WizardHeader extends ScreenAddon {
     float partialTicks
   ) {
     if (this.title != null) {
-      AbstractGui.drawCenteredString(matrixStack,
+      GuiComponent.drawCenteredString(matrixStack,
         screen.getMinecraft().font,
         this.title,
         screen.width / 2,
